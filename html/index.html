@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style type="text/css">
+        body { font-family: Arial; }
+        #main {  text-align: center; margin: 0px auto; width: 1005px; }
+        #logo { width: 1000px; height: 200px; }
+        .unittests div { width: 894px; font-family: monospace; text-align: left; margin: auto; padding: 5px; border: 1px solid black; }
+        #busyblock { position: fixed; display: none; background: url("data:image/gif;base64,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") #ccc no-repeat center; opacity: 0.4; width: 100%; height: 100%; top: 0; left: 0; z-index: 5000; }
+        #busyblock.busy { display: block; }
+        .hide { display: none; }
+        .show { display: block; }
+        /* IE8 */
+        #culturemenu { display:block; }
+        #apiCacheCheck { display:block;}
+        .footer { font-size: 90%; clear: both; width: 750px; padding: 10px 0 10px 0; margin: 50px auto auto auto; }
+        .footer div span.item { padding: 10px; }
+        .footer .authorbtc { float: left; width: 470px; }
+        .footer .authorbtc span.item { text-align: left; display: block; padding: 0 20px; }
+        .footer .authorbtc div { position: relative; z-index: 100; }
+        .footer .authorpgp { position: relative; }
+        .footer .authorpgp span.item { text-align: right; display: block; padding: 0 20px; }
+        .footer .copyright { font-size: 80%; clear: both; padding: 5px 0; }
+        .footer .copyright span { padding: 10px 2px; }
+    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css" media="screen">
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div id="busyblock"></div>
+<div id="main">
+    <div id="culturemenu">
+        <span><a href="?culture=en" id="cultureen" class="selected">English</a></span> |
+        <span><a href="?culture=es" id="culturees">Español</a></span> |
+        <span><a href="?culture=fr" id="culturefr">Français</a></span> |
+        <span><a href="?culture=el" id="cultureel">ελληνικά</a></span>
+    </div>
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-t">
+                    <li><a href="#setup" data-toggle="tab" class="nav-tab">Setup</a></li>
+                    <li><a href="#status" data-toggle="tab" class="nav-tab" id="withdraw-tab">Status</a></li>
+                    <li><a href="#help" data-toggle="tab" class="nav-tab">Help</a></li>
+                    <li><a href="#about" data-toggle="tab" class="nav-tab">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="">
+        <div class="tab-content">
+            <div class="tab-pane" id="setup">
+                <h2>Setup</h2>
+                <p>Enter variables</p>
+                <label>Stored Variables</label>
+                <div class="" id="setupForm">
+                   <div class="row">
+                        <div class="col-xs-6 col-xs-offset-3">
+                            <div id="statusAlert" class="alert alert-danger" style="display: none;">
+                                Oh Noes you Haz a Problem!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4 col-xs-offset-3">
+                            <div class="row img-rounded" style="background-color: #f2f2f2; padding: 10px;">
+                                <div class="col-xs-6">
+                                    <label>Current Status</label>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label class="form-control" id="status1"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--                    <div class="row">
+                                            <div class="col-xs-5 col-xs-offset-1">
+                                                <input type="button" class="btn btn-primary" value="Submit" id="statusBtn" >
+                                            </div>
+                                        </div>-->
+                    <div class="row">
+
+                        <div class="col-xs-6 col-xs-offset-3">
+                            <div id="servletInfo" class="alert alert-success" style="display: none;">
+                                <table>
+                                    <tr><td><label>Account Login</label> </td><td><label class="form-control text-muted" id="servletInfoLogin"></label></td></tr>
+                                    <tr><td><label>Account ID</label> </td><td><label class="form-control text-muted" id="servletInfoAccount"></label></td></tr>
+                                    <tr><td><label>Rights</label> </td><td><label class="form-control text-muted" id="servletInfoRights"></label></td></tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="status">
+                <h2>Status</h2>
+                <p>Get status updates here</p>
+                <div class="row">
+                    <div class="col-xs-6 col-xs-offset-3">
+                        <div id="statusAlert" class="alert alert-danger" style="display: none;">
+                            Oh Noes you Haz a Problem!
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr><th>Name</th><th>PIN</th><th>Value</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td>White LED</td><td><input type="text" class="form-control" placeholder="9" id="whiteLedPin"></td><td><input type="range" class="form-control" min="0" max="255" step="1" id="whiteLedValue" value="0"></td></tr>
+                    <tr><td>White LED2</td><td><input type="text" class="form-control" placeholder="5" id="whiteLed2Pin"></td><td><input type="range" class="form-control" min="0" max="255" step="1" id="whiteLed2Value" value="0"></td></tr>
+                    <tr><td>Blue LED</td><td><input type="text" class="form-control" placeholder="10" id="blueLedPin"></td><td><input type="range" class="form-control" min="0" max="255" step="1" id="blueLedValue" value="0"></td></tr>
+                    <tr><td>Royal Blue LED</td><td><input type="text" class="form-control" placeholder="6" id="RoyLedPin"></td><td><input type="range" class="form-control" min="0" max="255" step="1" id="RoyLedValue" value="0"></td></tr>
+                    <tr><td>UV LED</td><td><input type="text" class="form-control" placeholder="11" id="UVLedPin"></td><td><input type="range" class="form-control" min="0" max="255" step="1" id="UVLedValue" value="0"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="help">
+                <h2>Help</h2>
+                <p>This is the place where help will go</p>
+
+                <div class="row">
+                    <div class="col-xs-12">
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="about">
+                <h2>About</h2>
+                <p>This is the place to find out who made this and how to contact them</p>
+
+                <div class="row">
+                    <div class="col-xs-12">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- For cookied API settings -->
+        <!--<div id="apiCacheCheck" class="row alert alert-danger">-->
+            <!--<span id="apiCacheStatus">No Cookies Found</span>-->
+        <!--</div>-->
+    </div>
+    <!--div class="col-xs-8"-->
+
+    <!-- For API settings -->
+    <!--<div id="apiInfoEntry" class="row">-->
+        <!--<div class="form-inline">-->
+            <!--<div class="col-xs-8">-->
+                <!--<input type="text" class="form-control" placeholder="Enter API Key" id="apiInfoFormKey">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-inline">-->
+            <!--<div class="col-xs-8">-->
+                <!--<input type="text" class="form-control" placeholder="Enter API Secret" id="apiInfoFormSecret">-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <div class="row">
+        <div class="col-xs-5">
+        </div>
+        <div class="col-xs-1">
+            <input type="button" class="btn btn-primary" value="Update" id="updateBtn">
+        </div>
+        <div class="col-xs-1">
+            <input type="button" class="btn btn-primary" value="Submit" id="statusBtn" disabled="disabled">
+        </div>
+    </div>
+    <!--/div-->
+</div>
+<div class="footer">
+    <div class="container text-center">
+        <span class="text-center" style="margin-left: auto;margin-right: auto;">Footer Copyright Etc</span>
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+    var expireTime =1 ;
+    var currentValues;
+    var timerRunning = false;
+
+    function getAPICookies()
+    {
+        var cookies =[];
+/*        for(var entry in exchanges)
+        {
+            cookies.push(getCookie(entry.toString()));
+        }*/
+        return cookies;
+
+    }
+    function setAPICookie(cname,key,apisecret)
+    {
+        if(cname == undefined)
+            throw new DOMException(); //throw something more informative?
+        //serialize the values of the associative array
+        var serializedValue = JSON.stringify({'apikey':key,'secret':apisecret});
+        setCookie(cname,serializedValue,expireTime);
+    }
+    function emptyCookies(cookies)
+    {
+        var retval = true;
+        for(var i=0;i < cookies.length;i++)
+        {
+            var cookie = cookies[i];
+            if(cookie != "")
+                retval = false;
+        }
+        return retval;
+    }
+    function hasAPICookies()
+    {
+        var cookies = getAPICookies();
+        if(cookies.length == 0 || emptyCookies(cookies))
+        {
+            return false;
+        }
+        else
+            return true;
+    }
+    function getCookie(cname)
+    {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++)
+        {
+            var c = ca[i].trim();
+            if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+        }
+        return "";
+    }
+    function setCookie(cname,cvalue,exdays)
+    {
+        var d = new Date();
+        d.setTime(d.getTime()+(exdays*24*60*60*1000));
+        var expires = "expires="+d.toGMTString();
+        document.cookie = cname + "=" + cvalue + "; " + expires;
+    }
+
+    function getKeyAtIndex(index){
+        var retval = -1,counter =0;
+        for(var entry in exchanges)
+        {
+            if(counter++ == index)
+                return entry;
+        }
+        return retval;
+    }
+    /**
+     * Gets the current time in microseconds for nonce signing
+     * @param get_as_float a boolean to return as a float
+     */
+    function microtime (get_as_float) {
+        // From: http://phpjs.org/functions
+        // +   original by: Paulo Freitas
+        // *     example 1: timeStamp = microtime(true);
+        // *     example 1: timeStamp > 1000000000 && timeStamp < 2000000000
+        // *     returns 1: true
+        var now = new Date().getTime() / 1000;
+        var s = parseInt(now, 10);
+
+        return (get_as_float) ? now : (Math.round((now - s) * 1000) / 1000) + ' ' + s;
+    }
+    /**
+     * Returns the value from an associative array at the index provided
+     * @param obj the associative array
+     * @param index the index of the value you want
+     */
+    function valueForIndex(obj, index) {
+
+        var i = 0;
+        for (var key in obj) {
+
+            if (i++ == index)
+                return obj[key];
+        }
+    }
+    function executeInfoAPIRequest(options,callback)
+    {
+        return executeAPIRequest("http://192.168.2.2/info/",options,callback);
+    }
+    function executeCurrentAPIRequest(options,callback)
+    {
+        return executeAPIRequest("http://192.168.2.2/yocto/current",options,callback);
+    }
+    function executeAPIRequest(command,options,callback)
+    {
+        if (typeof callback == "function") {
+            var json = $.getJSON(command,options,callback).done(
+                    callback(null,json)
+            );
+        }
+    }
+    function getAPIInfo(callback)
+    {
+        executeInfoAPIRequest({},callback);
+    }
+    function updateValues()
+    {
+        executeCurrentAPIRequest({format:"json"},function(err,json,data)
+        {
+            if(json != undefined) {
+                currentValues = JSON.parse(data.responseText);
+                setSliderValue('whiteLedValue',currentValues.whiteL);
+                setSliderValue('whiteLed2Value',currentValues.whiteR);
+                setSliderValue('blueLedValue',currentValues.blue);
+                setSliderValue('RoyLedValue',currentValues.royalBlue);
+                setSliderValue('UVLedValue',currentValues.uv);
+            }
+        });
+    }
+function sendRESTIO(ledpin,ledvalue)
+{
+    var url = '/arduino/analog/';
+    if(ledpin.value == "")
+        url+=ledpin.placeholder+'/'+ledvalue+'/';
+    else
+        url+=ledpin.value+'/'+ledvalue+'/';
+    $.ajax({
+        type:'POST',
+        data:ledvalue,
+        url:url,
+        dataType: 'JSON'
+    }).done(function(response){
+                // Check for successful (blank) response
+                if (response.msg === '') {
+
+
+                }
+            });
+}
+
+    function setSliderValue(sliderID,value)
+    {
+        if(sliderID != undefined)
+            document.getElementById(sliderID).value = parseInt(value);
+    }
+
+    function processKeyEvent(event,pin,ledvalue)
+    {
+        if(event.keyCode == '38')
+        {
+            //up arrow
+            if(ledvalue.value < 255)
+            {
+                ledvalue.value++;
+                sendRESTIO(pin,ledvalue.value);
+            }
+        }
+        else if(event.keyCode == '40')
+        {
+            //down arrow
+            if(ledvalue.value > 0)
+            {
+                ledvalue.value--;
+                sendRESTIO(pin,ledvalue.value);
+            }
+        }
+    }
+    function recursiveTimer()
+    {
+        updateValues();
+        setTimeout(recursiveTimer,1000);
+        timerRunning = true;
+    }
+    $("#whiteLedValue").on('change',function(){
+        sendRESTIO($("#whiteLedPin")[0],$("#whiteLedValue")[0].value);
+    });
+    $("#whiteLedValue").on('keydown',function(event){
+        processKeyEvent(event,$("#whiteLedPin")[0],$("#whiteLedValue")[0]);
+    });
+    $("#whiteLed2Value").on('change',function(){
+        sendRESTIO($("#whiteLed2Pin")[0],$("#whiteLed2Value")[0].value);
+    });
+    $("#whiteLed2Value").on('keydown',function(event){
+        processKeyEvent(event,$("#whiteLed2Pin")[0],$("#whiteLed2Value")[0]);
+    });
+    $("#blueLedValue").on('change',function(){
+        sendRESTIO($("#blueLedPin")[0],$("#blueLedValue")[0].value);
+    });
+    $("#blueLedValue").on('keydown',function(event){
+        processKeyEvent(event,$("#blueLedPin")[0],$("#blueLedValue")[0]);
+    });
+    $("#RoyLedValue").on('change',function(){
+        sendRESTIO($("#RoyLedPin")[0],$("#RoyLedValue")[0].value);
+    });
+    $("#RoyLedValue").on('keydown',function(event){
+        processKeyEvent(event,$("#RoyLedPin")[0],$("#RoyLedValue")[0]);
+    });
+    $("#UVLedValue").on('change',function(){
+        sendRESTIO($("#UVLedPin")[0],$("#UVLedValue")[0].value);
+    });
+    $("#UVLedValue").on('keydown',function(event){
+        processKeyEvent(event,$("#UVLedPin")[0],$("#UVLedValue")[0]);
+    });
+    $(document).on('shown.bs.tab','a[data-toggle="tab"]:not(:last)',function(e) {
+        if(e.target.hash == "#setup")
+        {
+            $("#updateBtn").hide();
+            $("#statusBtn").hide();
+            $("#statusAlert").show();
+            executeCurrentAPIRequest({format:"json"},function(err,json,data){
+                if(json != undefined)
+                    $("#statusAlert").html(JSON.stringify(data.responseText));
+            });
+        }
+        else if(e.target.hash == "#status")
+        {
+            $("#updateBtn").show();
+            if(!timerRunning)
+                recursiveTimer();
+        }
+        else
+        {
+            $("#updateBtn").hide();
+            $("#statusBtn").hide();
+        }
+    });
+    $("#updateBtn").click(function(){
+        executeCurrentAPIRequest({format:"json"},function(err,json,data)
+        {
+            if(json != undefined) {
+                currentValues = JSON.parse(data.responseText);
+                setSliderValue('whiteLedValue',currentValues.whiteL);
+                setSliderValue('whiteLed2Value',currentValues.whiteR);
+                setSliderValue('blueLedValue',currentValues.blue);
+                setSliderValue('RoyLedValue',currentValues.royalBlue);
+                setSliderValue('UVLedValue',currentValues.uv);
+            }
+        });
+    });
+    $("#statusBtn").click(function(){
+        if(true)// setup some checks
+        {
+            $("#statusAlert").show();
+            $("#statusAlert").html("There is a problem");
+        }
+
+    });
+    function getCurrentValues()
+    {
+        executeCurrentAPIRequest({format:"json"},function(err,json,data){
+            updateValues(data.responseText);
+        });
+    }
+         function onInfoReceived(json){
+            //if (err) { throw err; }
+            console.log("---------------Client Info:--------------");
+            console.log(json);
+             var transdata = JSON.stringify(json['data']);
+
+        }
+    //$("#culturemenu").hide();
+    $("#updateBtn").hide();
+    $("#statusBtn").hide();
+    if(hasAPICookies()){
+        parseCookiesAndStore();
+        $("#apiCacheCheck").hide();
+        $("#apiInfoEntry").hide();
+        $("#apiInfo").show();
+        $("#CreateAPIKey").hide();
+    }
+    else
+    {
+        //do api key setup
+    }
+});
+</script>
+</body>
+</html>
